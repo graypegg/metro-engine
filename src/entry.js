@@ -1,5 +1,7 @@
-import api from './api'
+import DockerConnection from './system/DockerConnection.js'
 
-module.exports = () => {
-  console.log(api.msg)
+export default () => {
+  let dc = new DockerConnection();
+
+  dc.getContainers();
 }

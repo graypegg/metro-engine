@@ -64,39 +64,62 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 0 */,
+/* 1 */
+/***/ (function(module, exports) {
+
+module.exports = require("dockerode");
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__system_DockerConnection_js__ = __webpack_require__(3);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  msg: 'hey?'
+/* harmony default export */ __webpack_exports__["default"] = function () {
+  var dc = new __WEBPACK_IMPORTED_MODULE_0__system_DockerConnection_js__["a" /* default */]();
+
+  dc.getContainers();
 };
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _api = __webpack_require__(0);
+var Docker = __webpack_require__(1);
 
-var _api2 = _interopRequireDefault(_api);
+var DockerConnection = function () {
+  function DockerConnection() {
+    _classCallCheck(this, DockerConnection);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+    this.d = new Docker();
+  }
 
-module.exports = function () {
-  console.log(_api2.default.msg);
-};
+  _createClass(DockerConnection, [{
+    key: 'getContainers',
+    value: function getContainers(d) {
+      this.d.listContainers(function (err, containers) {
+        console.log(containers);
+      });
+    }
+  }]);
+
+  return DockerConnection;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = DockerConnection;
 
 /***/ })
 /******/ ]);

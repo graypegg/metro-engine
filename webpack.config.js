@@ -1,6 +1,7 @@
 module.exports = {
   entry: './src/entry.js',
-  externals: { dockerode: 'dockerode' },
+  target: 'node',
+  externals: { dockerode: 'require("dockerode")' },
   module : {
     loaders: [
       {
