@@ -18,7 +18,7 @@ class MetroConnection {
       this.buffer += chunk
 
       // If current buffer value is valid JSON, clear buffer and run events
-      var body;
+      let body;
       try {
         body = JSON.parse(this.buffer)
       } catch (e) { return }
@@ -41,15 +41,20 @@ class MetroConnection {
   command (command) {
     return this.on('data')
                .filter((data) => data.is === command)
+               .replace((data) => {
+                 delete data.is
+                 return data
+               })
   }
 }
 
 var cxn = new MetroConnection();
-cxn.command('init')
-   .do((data) => {
-     console.log('command: ', data)
-   })
 
+
+cxn.command('init')
+.do((data) => {
+  console.log('command: ', data)
+})
 cxn.on('data')
    .do((data) => {
      console.log('on: ', data)
