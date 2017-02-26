@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+var MetroEventResolver = require('./MetroInternal/MetroEventResolver.js')
+
 class MetroConnection {
   constructor () {
     this.buffer = ''
@@ -20,24 +22,35 @@ class MetroConnection {
         body = JSON.parse(this.buffer)
       } catch (e) { return }
       this.buffer = ''
-      this.events.data.forEach((fn) => fn(body))
+      this.events.data.forEach((upd) => upd(body))
     })
   }
 
   /* MetroConnection API */
 
-  on (event, fn) {
-    if (Object.keys(this.events).indexOf(event) !== -1) {
-      this.events[event].push(fn)
-    }
+  on (event) {
+    return new MetroEventResolver((upd, can) => {
+      if (Object.keys(this.events).indexOf(event) !== -1) {
+        this.events[event].push(upd)
+      }
+    })
   }
 
   command (command, fn) {
-    this.on('data', (data) => {
-      (data.is === command) && fn(data)
-    })
+    this.on('data')
+        .do((data) => {
+          (data.is === command) && fn(data)
+        })
   }
 }
 
 var cxn = new MetroConnection();
-cxn.command('init', (data) => console.log(data))
+cxn.on('data')
+   .do((data) => {
+     console.log(data)
+   })
+   .do((data) => {
+     console.log('second!', data)
+   })
+
+//cxn.command('init', (data) => console.log(data))
