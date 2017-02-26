@@ -81,12 +81,14 @@ module.exports = require("dockerode");
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__system_DockerConnection_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dockerode__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dockerode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_dockerode__);
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = function () {
-  var dc = new __WEBPACK_IMPORTED_MODULE_0__system_DockerConnection_js__["a" /* default */]();
-
-  dc.getContainers();
+  var dc = new __WEBPACK_IMPORTED_MODULE_0__system_DockerConnection_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_dockerode___default.a);
+  return dc.getContainers();
 };
 
 /***/ }),
@@ -94,24 +96,59 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MetroContainer__ = __webpack_require__(4);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Docker = __webpack_require__(1);
+
 
 var DockerConnection = function () {
-  function DockerConnection() {
+  function DockerConnection(Docker) {
     _classCallCheck(this, DockerConnection);
 
-    this.d = new Docker();
+    this.dc = new Docker();
   }
+
+  /**
+   * getContainers - Returns a list of all currently running MetroContainers
+   *
+   * @return {array} An array of MetroContainers
+   */
+
 
   _createClass(DockerConnection, [{
     key: 'getContainers',
-    value: function getContainers(d) {
-      this.d.listContainers(function (err, containers) {
-        console.log(containers);
+    value: function getContainers() {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        _this.dc.listContainers(function (err, containers) {
+
+          if (err) reject(err);else {
+            resolve(containers.filter(function (container) {
+              return true;
+            }).map(function (c) {
+              return new __WEBPACK_IMPORTED_MODULE_0__MetroContainer__["a" /* default */](_this.dc, c);
+            }));
+          }
+        });
+      });
+    }
+
+    /**
+     * getContainer - Returns a MetroContainer matching the type param
+     *
+     * @param {string} type MetroContainer type
+     *
+     * @return {MetroContainer} The requested MetroContainer, or null if not found
+     */
+
+  }, {
+    key: 'getContainer',
+    value: function getContainer(type) {
+      return this.getContainers.filter(function (container) {
+        return container;
       });
     }
   }]);
@@ -120,6 +157,21 @@ var DockerConnection = function () {
 }();
 
 /* harmony default export */ __webpack_exports__["a"] = DockerConnection;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MetroContainer = function MetroContainer(dc, container) {
+  _classCallCheck(this, MetroContainer);
+
+  this.c = dc.getContainer(container.Id);
+};
+
+/* harmony default export */ __webpack_exports__["a"] = MetroContainer;
 
 /***/ })
 /******/ ]);
