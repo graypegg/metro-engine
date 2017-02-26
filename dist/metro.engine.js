@@ -83,13 +83,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__system_DockerConnection_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dockerode__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dockerode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_dockerode__);
+/* harmony export (immutable) */ __webpack_exports__["init"] = init;
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = function () {
-  var dc = new __WEBPACK_IMPORTED_MODULE_0__system_DockerConnection_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_dockerode___default.a);
-  return dc.getContainers();
-};
+function init() {
+  return new __WEBPACK_IMPORTED_MODULE_0__system_DockerConnection_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_dockerode___default.a);
+}
 
 /***/ }),
 /* 3 */
