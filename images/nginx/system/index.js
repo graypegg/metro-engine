@@ -6,7 +6,8 @@ class MetroConnection {
   constructor () {
     this.buffer = ''
     this.events = {
-      data: []
+      data: [],
+      die: []
     }
 
     process.stdin.on('data', (chunk) => {
@@ -32,6 +33,7 @@ class MetroConnection {
     return new MetroStream((post, kill) => {
       if (Object.keys(this.events).indexOf(event) !== -1) {
         this.events[event].push(post)
+        this.events.die.push(kill)
       }
     })
   }
