@@ -22,6 +22,9 @@ class MetroStream {
 
         if (def.type === 'void') {
           def.fn(safeContent)
+        } else if (def.type === 'void wait') {
+          // Gotta figure this out...
+          await (new Promise((res, rej) => def.fn(safeContent, res, rej) ))
         } else if (def.type === 'transform') {
           this.content = Object.assign({}, this.content, def.fn(safeContent))
         } else if (def.type === 'replace') {
@@ -46,6 +49,14 @@ class MetroStream {
   do (fn) {
     this.deferred.push({
       type: 'void',
+      fn
+    })
+    return this
+  }
+
+  wait (fn) {
+    this.deferred.push({
+      type: 'void wait',
       fn
     })
     return this

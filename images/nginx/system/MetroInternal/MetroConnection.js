@@ -44,6 +44,13 @@ class MetroConnection {
                  return data
                })
   }
+
+  send (is, obj) {
+    obj.is = is
+    process.stdout.write(
+      JSON.stringify(obj)
+    );
+  }
 }
 
 module.exports = MetroConnection

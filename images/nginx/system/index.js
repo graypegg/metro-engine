@@ -1,8 +1,16 @@
 var MetroConnection = require('./MetroInternal/MetroConnection')
 
-var cxn = new MetroConnection();
+var exec = require('child_process').exec
 
-cxn.command('init')
+var cxn = new MetroConnection();
+cxn.command('ping')
    .do((data) => {
-     console.log('init: ', data)
+     cxn.send('pong', {})
+   })
+
+cxn.command('reload')
+   .wait((data, res, rej) => {
+     exec('nginx -s reload', (err, stdout) => {
+       res()
+     })
    })
