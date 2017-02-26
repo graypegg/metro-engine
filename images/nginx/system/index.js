@@ -36,24 +36,21 @@ class MetroConnection {
     })
   }
 
-  command (command, fn) {
-    this.on('data')
-        .do((data) => {
-          (data.is === command) && fn(data)
-        })
+  command (command) {
+    return this.on('data')
+               .filter((data) => data.is === command)
   }
 }
 
 var cxn = new MetroConnection();
+cxn.command('init')
+   .do((data) => {
+     console.log('command: ', data)
+   })
+
 cxn.on('data')
    .do((data) => {
-     console.log(data)
-   })
-   .transform((data) => {
-     return { i: data.i + 1 }
-   })
-   .do((data) => {
-     console.log('second!', data)
+     console.log('on: ', data)
    })
 
 //cxn.command('init', (data) => console.log(data))

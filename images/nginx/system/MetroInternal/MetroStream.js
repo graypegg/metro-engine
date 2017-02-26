@@ -16,12 +16,17 @@ class MetroStream {
   post (data) {
     if (this.alive) {
       this.content = data
-      this.deferred.forEach((def) => {
+      this.deferred.every((def) => {
+
         if (def.type === 'void') {
           def.fn(this.content)
         } else if (def.type === 'transform') {
           this.content = Object.assign({}, this.content, def.fn(this.content))
+        } else if (def.type === 'filter') {
+          if (!def.fn(data)) return false
         }
+
+        return true
       })
     }
   }
@@ -45,6 +50,14 @@ class MetroStream {
   transform (fn) {
     this.deferred.push({
       type: 'transform',
+      fn
+    })
+    return this
+  }
+
+  filter (fn) {
+    this.deferred.push({
+      type: 'filter',
       fn
     })
     return this
