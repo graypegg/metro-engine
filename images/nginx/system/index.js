@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var MetroEventResolver = require('./MetroInternal/MetroEventResolver.js')
+var MetroStream = require('./MetroInternal/MetroStream.js')
 
 class MetroConnection {
   constructor () {
@@ -22,16 +22,16 @@ class MetroConnection {
         body = JSON.parse(this.buffer)
       } catch (e) { return }
       this.buffer = ''
-      this.events.data.forEach((upd) => upd(body))
+      this.events.data.forEach((post) => post(body))
     })
   }
 
   /* MetroConnection API */
 
   on (event) {
-    return new MetroEventResolver((upd, can) => {
+    return new MetroStream((post, kill) => {
       if (Object.keys(this.events).indexOf(event) !== -1) {
-        this.events[event].push(upd)
+        this.events[event].push(post)
       }
     })
   }

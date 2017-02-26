@@ -1,17 +1,19 @@
-class MetroEventResolver {
-  constructor ( fn ) {
+class MetroStream {
+  constructor ( initiator ) {
     this.content = null
     this.deferred = []
     this.alive = true
 
     try {
-      fn(this.update.bind(this), this.cancel.bind(this))
+      initiator(this.post.bind(this), this.kill.bind(this))
     } catch (e) {
-      this.cancel()
+      this.kill()
     }
   }
 
-  update (data) {
+  /* Stream Actions */
+
+  post (data) {
     if (this.alive) {
       this.content = data
       this.deferred.forEach((def) => {
@@ -24,11 +26,13 @@ class MetroEventResolver {
     }
   }
 
-  cancel (data) {
+  kill (data) {
     this.content = null
     this.deferred = []
     this.alive = false
   }
+
+  /* Stream API */
 
   do (fn) {
     this.deferred.push({
@@ -47,4 +51,4 @@ class MetroEventResolver {
   }
 }
 
-module.exports = MetroEventResolver
+module.exports = MetroStream
