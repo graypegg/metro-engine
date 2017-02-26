@@ -14,8 +14,12 @@ class MetroEventResolver {
   update (data) {
     if (this.alive) {
       this.content = data
-      this.deferred.forEach((fn) => {
-        fn(this.content)
+      this.deferred.forEach((def) => {
+        if (def.type === 'void') {
+          def.fn(this.content)
+        } else if (def.type === 'transform') {
+          this.content = Object.assign({}, this.content, def.fn(this.content))
+        }
       })
     }
   }
@@ -27,7 +31,18 @@ class MetroEventResolver {
   }
 
   do (fn) {
-    this.deferred.push(fn)
+    this.deferred.push({
+      type: 'void',
+      fn
+    })
+    return this
+  }
+
+  transform (fn) {
+    this.deferred.push({
+      type: 'transform',
+      fn
+    })
     return this
   }
 }

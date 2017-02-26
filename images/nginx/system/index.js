@@ -49,6 +49,9 @@ cxn.on('data')
    .do((data) => {
      console.log(data)
    })
+   .transform((data) => {
+     return { i: data.i + 1 }
+   })
    .do((data) => {
      console.log('second!', data)
    })
